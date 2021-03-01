@@ -22,7 +22,7 @@ idempotency-key: exampleUniqueHashString
 By default memory will be used as a data storage
 ```js
 // moleculer.config.js
-const IdempotencyMiddleware = require("moleculer-idempotency");
+const IdempotencyMiddleware = require("moleculer.idempotency");
 
 module.exports = {
   middlewares: [
@@ -34,7 +34,7 @@ module.exports = {
 **Load with Redis options**
 ```js
 // moleculer.config.js
-const IdempotencyMiddleware = require("moleculer-idempotency");
+const IdempotencyMiddleware = require("moleculer.idempotency");
 
 module.exports = {
   middlewares: [
@@ -61,6 +61,6 @@ module.exports = {
 |lifetime | Time (in seconds) how long the idempotency data will be saved in data storage. After this time period data will be purged and the next request with same Idempotency-Key will execute the endpoint. Default value is 1 hour (3600 seconds).  |
 
 ## License
-Moleculer-Idempotency is available under the [MIT license](https://tldrlegal.com/license/mit-license).
+moleculer.idempotency is available under the [MIT license](https://tldrlegal.com/license/mit-license).
 
 ###### Copyright (c) 2021 eduardavetyan
