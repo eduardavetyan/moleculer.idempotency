@@ -26,7 +26,7 @@ module.exports = function IdempotencyMiddleware(opts){
 
     try{
       if( ctx.action.name == ctx.options.parentCtx.params.req.$action.name )
-        return ctx.options.parentCtx.params.req.headers[keyName];
+        return ctx.options.parentCtx.params.req.headers[keyName.toLowerCase()];
     } catch {
       return;
     }
