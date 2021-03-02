@@ -2,6 +2,8 @@
 
 Idempotency middleware stands for client requests to be idempotent. Client can make the same request repeatedly because of network error, timeout etc.. but the same operation will not be executed twice. Client must repeat the same request by sending the same Idempotency-Key value in request headers, and the request will be responded with the same response as the original request.
 
+Moleculer.Idempotency middleware is compatible with [moleculer-web](https://github.com/moleculerjs/moleculer-web) API Gateway
+
 ### Installation
 This module is available on the public NPM registry:
 
@@ -18,6 +20,8 @@ idempotency-key: exampleUniqueHashString
 ```
 
 ### Usage
+Moleculer.Idempotency middleware must be included in API Gateway *moleculer.config.js* file
+
 **Load with default options**
 By default memory will be used as a data storage
 ```js

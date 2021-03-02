@@ -14,7 +14,7 @@ module.exports = function IdempotencyMiddleware(opts){
       type: 'memory',  // Data storage
       options: {}  // Data storage options
     },
-    lifetime: 60 * 60 // Lifetime (in seconds) of data saved in idempotency storage, not available for Memory storage
+    lifetime: 60 * 60 // Lifetime (in seconds) of data saved in idempotency storage
   }
 
   // Merge user defined options with defaults
