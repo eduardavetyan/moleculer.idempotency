@@ -7,7 +7,8 @@
 "use strict";
 
 const EventEmitter = require("events"),
-      IdempotencyEmitter = new EventEmitter()
+      IdempotencyEmitter = new EventEmitter(),
+      {serializeError, deserializeError} = require('serialize-error')
 
 // Wait for data to be responded by first called request and return it
 const waitForResult = (key) => new Promise((resolve, reject) => {
@@ -24,14 +25,18 @@ module.exports = {
   // Get data by idempotency key
   get: async (key) => {
 
-    let data = await module.exports.storageGet(key)
+    let data = await module.exports.storageGet(key),
+        result
 
-    if( data )
-      if( data.finished )
-        return { success: true, result: data } // Return if data is already ready
-      else
-        return { success: true, result: await waitForResult(key) } // Otherwise wait for it
-    else
+    if( data ){
+      if( !data.finished ) // If previous request execution was not finished, wait for it
+        data = await waitForResult(key)
+
+      if( data.error )
+        data.response = deserializeError(data.response) // Deserialize Error object
+
+      return { success: true, result: data }
+    } else
       return { success: false }
 
   },
@@ -45,6 +50,9 @@ module.exports = {
 
   // Assign final endpoint response data to idempotency key and emit an event
   setFinal: async (key, response, lifetime, error = false) => {
+
+    if( error )
+      response = serializeError(response) // Serialize Error object
 
     const data = { finished: 1, response, lifetime, error }
 
