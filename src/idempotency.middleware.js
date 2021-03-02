@@ -14,18 +14,19 @@ module.exports = function IdempotencyMiddleware(opts){
       type: 'memory',  // Data storage
       options: {}  // Data storage options
     },
-    lifetime: 60 * 60 // Lifetime (in seconds) of data saved in idempotency storage
+    lifetime: 60 * 60, // Lifetime (in seconds) of data saved in idempotency storage
+    keyName: 'idempotency-key'
   }
 
   // Merge user defined options with defaults
   const options = {...defaultOptions, ...opts}
 
-  // Get Idempotency-Key from request headers if exists. Get only from level 2 Context
-  const getIdempotencyKey = (ctx) => {
+  // Get Idempotency Key from request headers if exists.
+  const getIdempotencyKey = (ctx, keyName) => {
 
     try{
       if( ctx.action.name == ctx.options.parentCtx.params.req.$action.name )
-        return ctx.options.parentCtx.params.req.headers['idempotency-key'];
+        return ctx.options.parentCtx.params.req.headers[keyName];
     } catch {
       return;
     }
@@ -43,7 +44,7 @@ module.exports = function IdempotencyMiddleware(opts){
   // Middleware function
   const idempotencyMiddleware = async (ctx, next, action) => {
 
-    let idempotencyKey = getIdempotencyKey(ctx)
+    let idempotencyKey = getIdempotencyKey(ctx, options.keyName)
 
     // Check if idempotency key was sent
     if( idempotencyKey ){

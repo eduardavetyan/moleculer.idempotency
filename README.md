@@ -1,6 +1,6 @@
 # Idempotency middleware for Moleculer Microservices Framework
 
-Idempotency middleware stands for client requests to be idempotent. Client can make the same request repeatedly because of network error, timeout etc.. but the same operation will not be executed twice. Client must repeat the same request by sending the same Idempotency-Key value in request headers, and the request will be responded with the same response as the original request.
+Idempotency middleware stands for client requests to be idempotent. Client can make the same request repeatedly because of network error, timeout etc.. but the same operation will not be executed twice. Client must repeat the same request by sending the same Idempotency Key value in request headers, and the request will be responded with the same response as the original request.
 
 Moleculer.Idempotency middleware is compatible with [moleculer-web](https://github.com/moleculerjs/moleculer-web) API Gateway
 
@@ -12,8 +12,9 @@ npm install moleculer.idempotency --save
 ```
 
 ### Client request
-Client must include idempotency-key in every request.
-idempotency-key must be a unique key per same requests.
+Client must include idempotency key in every request.
+Idempotency key must be a unique key per same requests.
+The header name can be configured through middleware options. Default name is idempotency-key
 
 ```
 idempotency-key: exampleUniqueHashString
@@ -51,7 +52,8 @@ module.exports = {
             "port": 6379
         }
       },
-      lifetime: 60 * 60 // seconds
+      lifetime: 60 * 60, // seconds
+      keyName: 'idempotency-key'
     })
   ]
 };
@@ -63,6 +65,7 @@ module.exports = {
 |--|--|
 |storage  | Data storage type and options. Available types are: Memory, Redis |
 |lifetime | Time (in seconds) how long the idempotency data will be saved in data storage. After this time period data will be purged and the next request with same Idempotency-Key will execute the endpoint. Default value is 1 hour (3600 seconds).  |
+|keyName  | Idempotency key header name. Default value is *idempotency-key* |
 
 ## License
 moleculer.idempotency is available under the [MIT license](https://tldrlegal.com/license/mit-license).
